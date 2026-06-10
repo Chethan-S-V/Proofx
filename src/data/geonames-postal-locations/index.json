@@ -1,0 +1,447 @@
+{
+  "generatedAt": "2026-06-08T19:07:56.179Z",
+  "license": "GeoNames postal code data, Creative Commons Attribution 4.0",
+  "source": "https://download.geonames.org/export/zip/allCountries.zip",
+  "countries": [
+    {
+      "countryCode": "AX",
+      "countryName": "Åland Islands",
+      "locationCount": 37
+    },
+    {
+      "countryCode": "AL",
+      "countryName": "Albania",
+      "locationCount": 490
+    },
+    {
+      "countryCode": "DZ",
+      "countryName": "Algeria",
+      "locationCount": 15951
+    },
+    {
+      "countryCode": "AS",
+      "countryName": "American Samoa",
+      "locationCount": 1
+    },
+    {
+      "countryCode": "AD",
+      "countryName": "Andorra",
+      "locationCount": 7
+    },
+    {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "locationCount": 20260
+    },
+    {
+      "countryCode": "AU",
+      "countryName": "Australia",
+      "locationCount": 3624
+    },
+    {
+      "countryCode": "AT",
+      "countryName": "Austria",
+      "locationCount": 2553
+    },
+    {
+      "countryCode": "AZ",
+      "countryName": "Azerbaijan",
+      "locationCount": 1186
+    },
+    {
+      "countryCode": "BD",
+      "countryName": "Bangladesh",
+      "locationCount": 1349
+    },
+    {
+      "countryCode": "BY",
+      "countryName": "Belarus",
+      "locationCount": 3127
+    },
+    {
+      "countryCode": "BE",
+      "countryName": "Belgium",
+      "locationCount": 1146
+    },
+    {
+      "countryCode": "BM",
+      "countryName": "Bermuda",
+      "locationCount": 112
+    },
+    {
+      "countryCode": "BR",
+      "countryName": "Brazil",
+      "locationCount": 5525
+    },
+    {
+      "countryCode": "BG",
+      "countryName": "Bulgaria",
+      "locationCount": 4440
+    },
+    {
+      "countryCode": "CA",
+      "countryName": "Canada",
+      "locationCount": 1657
+    },
+    {
+      "countryCode": "CL",
+      "countryName": "Chile",
+      "locationCount": 346
+    },
+    {
+      "countryCode": "CN",
+      "countryName": "China",
+      "locationCount": 2349
+    },
+    {
+      "countryCode": "CO",
+      "countryName": "Colombia",
+      "locationCount": 3681
+    },
+    {
+      "countryCode": "CR",
+      "countryName": "Costa Rica",
+      "locationCount": 473
+    },
+    {
+      "countryCode": "HR",
+      "countryName": "Croatia",
+      "locationCount": 6774
+    },
+    {
+      "countryCode": "CY",
+      "countryName": "Cyprus",
+      "locationCount": 1127
+    },
+    {
+      "countryCode": "CZ",
+      "countryName": "Czechia",
+      "locationCount": 2770
+    },
+    {
+      "countryCode": "DK",
+      "countryName": "Denmark",
+      "locationCount": 1159
+    },
+    {
+      "countryCode": "EC",
+      "countryName": "Ecuador",
+      "locationCount": 1221
+    },
+    {
+      "countryCode": "EE",
+      "countryName": "Estonia",
+      "locationCount": 5307
+    },
+    {
+      "countryCode": "FI",
+      "countryName": "Finland",
+      "locationCount": 3576
+    },
+    {
+      "countryCode": "FR",
+      "countryName": "France",
+      "locationCount": 20440
+    },
+    {
+      "countryCode": "GF",
+      "countryName": "French Guiana",
+      "locationCount": 77
+    },
+    {
+      "countryCode": "PF",
+      "countryName": "French Polynesia",
+      "locationCount": 93
+    },
+    {
+      "countryCode": "DE",
+      "countryName": "Germany",
+      "locationCount": 19779
+    },
+    {
+      "countryCode": "GP",
+      "countryName": "Guadeloupe",
+      "locationCount": 105
+    },
+    {
+      "countryCode": "GU",
+      "countryName": "Guam",
+      "locationCount": 21
+    },
+    {
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "locationCount": 548
+    },
+    {
+      "countryCode": "HT",
+      "countryName": "Haiti",
+      "locationCount": 236
+    },
+    {
+      "countryCode": "HN",
+      "countryName": "Honduras",
+      "locationCount": 38
+    },
+    {
+      "countryCode": "HU",
+      "countryName": "Hungary",
+      "locationCount": 3571
+    },
+    {
+      "countryCode": "IN",
+      "countryName": "India",
+      "locationCount": 20609
+    },
+    {
+      "countryCode": "IE",
+      "countryName": "Ireland",
+      "locationCount": 139
+    },
+    {
+      "countryCode": "IT",
+      "countryName": "Italy",
+      "locationCount": 4745
+    },
+    {
+      "countryCode": "JP",
+      "countryName": "Japan",
+      "locationCount": 142627
+    },
+    {
+      "countryCode": "KE",
+      "countryName": "Kenya",
+      "locationCount": 890
+    },
+    {
+      "countryCode": "LV",
+      "countryName": "Latvia",
+      "locationCount": 989
+    },
+    {
+      "countryCode": "LI",
+      "countryName": "Liechtenstein",
+      "locationCount": 13
+    },
+    {
+      "countryCode": "LT",
+      "countryName": "Lithuania",
+      "locationCount": 2071
+    },
+    {
+      "countryCode": "LU",
+      "countryName": "Luxembourg",
+      "locationCount": 4407
+    },
+    {
+      "countryCode": "MW",
+      "countryName": "Malawi",
+      "locationCount": 491
+    },
+    {
+      "countryCode": "MY",
+      "countryName": "Malaysia",
+      "locationCount": 2814
+    },
+    {
+      "countryCode": "MT",
+      "countryName": "Malta",
+      "locationCount": 73
+    },
+    {
+      "countryCode": "MH",
+      "countryName": "Marshall Islands",
+      "locationCount": 2
+    },
+    {
+      "countryCode": "MQ",
+      "countryName": "Martinique",
+      "locationCount": 95
+    },
+    {
+      "countryCode": "YT",
+      "countryName": "Mayotte",
+      "locationCount": 21
+    },
+    {
+      "countryCode": "MX",
+      "countryName": "Mexico",
+      "locationCount": 32448
+    },
+    {
+      "countryCode": "FM",
+      "countryName": "Micronesia",
+      "locationCount": 4
+    },
+    {
+      "countryCode": "MD",
+      "countryName": "Moldova",
+      "locationCount": 1753
+    },
+    {
+      "countryCode": "MC",
+      "countryName": "Monaco",
+      "locationCount": 1
+    },
+    {
+      "countryCode": "MA",
+      "countryName": "Morocco",
+      "locationCount": 1325
+    },
+    {
+      "countryCode": "NL",
+      "countryName": "Netherlands",
+      "locationCount": 4151
+    },
+    {
+      "countryCode": "NC",
+      "countryName": "New Caledonia",
+      "locationCount": 52
+    },
+    {
+      "countryCode": "NZ",
+      "countryName": "New Zealand",
+      "locationCount": 1711
+    },
+    {
+      "countryCode": "MP",
+      "countryName": "Northern Mariana Islands",
+      "locationCount": 3
+    },
+    {
+      "countryCode": "NO",
+      "countryName": "Norway",
+      "locationCount": 5132
+    },
+    {
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "locationCount": 2563
+    },
+    {
+      "countryCode": "PA",
+      "countryName": "Panama",
+      "locationCount": 729
+    },
+    {
+      "countryCode": "PE",
+      "countryName": "Peru",
+      "locationCount": 2671
+    },
+    {
+      "countryCode": "PH",
+      "countryName": "Philippines",
+      "locationCount": 1911
+    },
+    {
+      "countryCode": "PL",
+      "countryName": "Poland",
+      "locationCount": 20643
+    },
+    {
+      "countryCode": "PT",
+      "countryName": "Portugal",
+      "locationCount": 197772
+    },
+    {
+      "countryCode": "PR",
+      "countryName": "Puerto Rico",
+      "locationCount": 177
+    },
+    {
+      "countryCode": "RE",
+      "countryName": "Réunion",
+      "locationCount": 151
+    },
+    {
+      "countryCode": "RO",
+      "countryName": "Romania",
+      "locationCount": 37915
+    },
+    {
+      "countryCode": "RU",
+      "countryName": "Russia",
+      "locationCount": 43397
+    },
+    {
+      "countryCode": "SK",
+      "countryName": "Slovakia",
+      "locationCount": 3514
+    },
+    {
+      "countryCode": "KR",
+      "countryName": "South Korea",
+      "locationCount": 34346
+    },
+    {
+      "countryCode": "ES",
+      "countryName": "Spain",
+      "locationCount": 11172
+    },
+    {
+      "countryCode": "LK",
+      "countryName": "Sri Lanka",
+      "locationCount": 1833
+    },
+    {
+      "countryCode": "PM",
+      "countryName": "St. Pierre & Miquelon",
+      "locationCount": 2
+    },
+    {
+      "countryCode": "SJ",
+      "countryName": "Svalbard & Jan Mayen",
+      "locationCount": 8
+    },
+    {
+      "countryCode": "SE",
+      "countryName": "Sweden",
+      "locationCount": 18853
+    },
+    {
+      "countryCode": "CH",
+      "countryName": "Switzerland",
+      "locationCount": 3406
+    },
+    {
+      "countryCode": "TH",
+      "countryName": "Thailand",
+      "locationCount": 900
+    },
+    {
+      "countryCode": "TR",
+      "countryName": "Türkiye",
+      "locationCount": 2960
+    },
+    {
+      "countryCode": "VI",
+      "countryName": "U.S. Virgin Islands",
+      "locationCount": 16
+    },
+    {
+      "countryCode": "UA",
+      "countryName": "Ukraine",
+      "locationCount": 26590
+    },
+    {
+      "countryCode": "GB",
+      "countryName": "United Kingdom",
+      "locationCount": 3406
+    },
+    {
+      "countryCode": "US",
+      "countryName": "United States",
+      "locationCount": 40979
+    },
+    {
+      "countryCode": "UY",
+      "countryName": "Uruguay",
+      "locationCount": 1964
+    },
+    {
+      "countryCode": "WF",
+      "countryName": "Wallis & Futuna",
+      "locationCount": 3
+    }
+  ]
+}
