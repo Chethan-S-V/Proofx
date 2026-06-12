@@ -38,6 +38,7 @@ export type DashboardProfile = {
   lastName: string;
   linkedin: string | null;
   location: string | null;
+  majorSkill: string | null;
   openToWork: boolean;
   phoneNumber: string | null;
   phoneVisibility: "public" | "recruiters" | "connections" | "private";
@@ -148,6 +149,7 @@ export function getDashboardProfile(user: User): DashboardProfile {
     lastName,
     linkedin: metadata.linkedin ?? null,
     location: metadata.location ?? ([metadata.district, metadata.state].filter(Boolean).join(", ") || null),
+    majorSkill: metadata.majorSkill ?? null,
     openToWork: metadata.openToWork,
     phoneNumber: metadata.phoneNumber ?? null,
     phoneVisibility: metadata.phoneVisibility,
@@ -296,7 +298,12 @@ export async function updateProfileAbout(formData: FormData) {
 export async function updateProfileSkills(formData: FormData) {
   "use server";
 
-  await updateMetadata(updateProfileSkillsSchema.parse({ skills: getText(formData.get("skills")) }));
+  await updateMetadata(
+    updateProfileSkillsSchema.parse({
+      majorSkill: getText(formData.get("majorSkill")),
+      skills: getText(formData.get("skills")),
+    }),
+  );
 }
 
 export async function addProfileExperience(formData: FormData) {

@@ -6,28 +6,68 @@ import { redirect } from "next/navigation";
 type SignupPageProps = {
   searchParams?: Promise<{
     authError?: string;
+    emailError?: string;
+    firstNameError?: string;
+    lastNameError?: string;
     oauthError?: string;
+    passwordError?: string;
   }>;
 };
 
 export default async function SignupPage({ searchParams }: SignupPageProps) {
   const params = await searchParams;
+  const emailError = params?.emailError;
+  const firstNameError = params?.firstNameError;
+  const lastNameError = params?.lastNameError;
+  const passwordError = params?.passwordError;
   const authError = params?.authError ?? params?.oauthError;
 
   async function signupAction(formData: FormData) {
     "use server";
 
-    const input = signupSchema.parse({
+    const parsedInput = signupSchema.safeParse({
       email: formData.get("email")?.toString() ?? "",
       password: formData.get("password")?.toString() ?? "",
       firstName: formData.get("firstName")?.toString() || undefined,
       lastName: formData.get("lastName")?.toString() || undefined,
     });
 
+    if (!parsedInput.success) {
+      const redirectParams = new URLSearchParams();
+
+      for (const issue of parsedInput.error.issues) {
+        const fieldName = issue.path.at(0);
+
+        if (fieldName === "email") {
+          redirectParams.set("emailError", issue.message);
+        }
+
+        if (fieldName === "password") {
+          redirectParams.set("passwordError", issue.message);
+        }
+
+        if (fieldName === "firstName") {
+          redirectParams.set("firstNameError", issue.message);
+        }
+
+        if (fieldName === "lastName") {
+          redirectParams.set("lastNameError", issue.message);
+        }
+      }
+
+      redirect(`/signup?${redirectParams.toString()}`);
+    }
+
+    const input = parsedInput.data;
+
     const { error, data } = await signupWithEmail(input);
 
     if (error) {
-      redirect(`/signup?authError=${encodeURIComponent(error.message)}`);
+      const redirectParams = new URLSearchParams();
+
+      redirectParams.set("emailError", error.message);
+
+      redirect(`/signup?${redirectParams.toString()}`);
     }
 
     if (data.session) {
@@ -262,6 +302,11 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               <form action={signupAction} className="space-y-5">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="block">
+                    {firstNameError ? (
+                      <span className="mb-2 block rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                        {firstNameError}
+                      </span>
+                    ) : null}
                     <span className="mb-2 block text-sm font-medium text-slate-700">First name</span>
                     <input
                       name="firstName"
@@ -273,6 +318,11 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
                   </label>
 
                   <label className="block">
+                    {lastNameError ? (
+                      <span className="mb-2 block rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                        {lastNameError}
+                      </span>
+                    ) : null}
                     <span className="mb-2 block text-sm font-medium text-slate-700">Last name</span>
                     <input
                       name="lastName"
@@ -285,6 +335,11 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
                 </div>
 
                 <label className="block">
+                  {emailError ? (
+                    <span className="mb-2 block rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                      {emailError}
+                    </span>
+                  ) : null}
                   <span className="mb-2 block text-sm font-medium text-slate-700">Email</span>
                   <input
                     name="email"
@@ -297,6 +352,11 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
                 </label>
 
                 <label className="block">
+                  {passwordError ? (
+                    <span className="mb-2 block rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                      {passwordError}
+                    </span>
+                  ) : null}
                   <span className="mb-2 block text-sm font-medium text-slate-700">Password</span>
                   <input
                     name="password"

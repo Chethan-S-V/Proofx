@@ -71,6 +71,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
                   {profile.headline || "This member has not added a headline yet."}
                 </p>
+                {profile.majorSkill ? <p className="mt-1 text-sm font-medium text-cyan-300">{profile.majorSkill}</p> : null}
                 {profile.showLocation && profileLocation ? (
                   <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-slate-500">
                     <MapPin className="h-3.5 w-3.5 text-slate-600" aria-hidden="true" />

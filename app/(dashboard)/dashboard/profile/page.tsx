@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { ProfileContactInfo } from "../../../../src/components/profile/profile-contact-info";
 import { ProfileIntroEditor } from "../../../../src/components/profile/profile-intro-editor";
 import { ProfileMediaEditor } from "../../../../src/components/profile/profile-media-editor";
-import { AboutEditor, DeleteProfileItemButton, DeleteSkillButton, SimpleProfileEditor, SkillsEditor } from "../../../../src/components/profile/profile-section-editors";
+import { AboutEditor, SimpleProfileEditor, SkillsEditor } from "../../../../src/components/profile/profile-section-editors";
 import { Card, CardContent, CardHeader } from "../../../../src/components/ui/card";
 import { getServerUser } from "../../../../src/lib/auth/service";
 import {
@@ -97,6 +97,7 @@ export default async function ProfilePage() {
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
                   {profile.headline || "Add a headline that explains what you build, verify, and prove."}
                 </p>
+                {profile.majorSkill ? <p className="mt-1 text-sm font-medium text-cyan-300">{profile.majorSkill}</p> : null}
                 <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span className="inline-flex items-center gap-1.5 text-slate-500">
                     <MapPin className="h-3.5 w-3.5 text-slate-600" aria-hidden="true" />
@@ -150,13 +151,12 @@ export default async function ProfilePage() {
 
           <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>
-              <h2 className="text-base font-semibold">Recent Work</h2>
-              <SimpleProfileEditor action={addProfileExperience} profile={profile} type="work" />
+              <h2 className="text-base font-semibold">Experience</h2>
+              <SimpleProfileEditor action={addProfileExperience} deleteAction={removeProfileItemFromForm} profile={profile} type="work" />
             </CardHeader>
             <CardContent className="space-y-3">
               {profile.experience.slice(0, 3).map((item) => (
-                <div className="group/item relative rounded-md border border-slate-800 p-3 pr-11" key={item.id}>
-                  <DeleteProfileItemButton action={removeProfileItemFromForm} collection="experience" id={item.id} label={`Delete ${item.title}`} />
+                <div className="rounded-md border border-slate-800 p-3" key={item.id}>
                   <p className="flex items-center gap-2 text-sm font-medium">
                     <Briefcase className="h-4 w-4 text-cyan-300" aria-hidden="true" />
                     {item.title}
@@ -168,15 +168,14 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="group border-slate-800 bg-slate-950 text-white">
+            <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>
               <h2 className="text-base font-semibold">Education</h2>
-              <SimpleProfileEditor action={addProfileEducation} profile={profile} type="education" />
+              <SimpleProfileEditor action={addProfileEducation} deleteAction={removeProfileItemFromForm} profile={profile} type="education" />
             </CardHeader>
             <CardContent className="space-y-3">
               {profile.education.slice(0, 3).map((item) => (
-                <div className="group/item relative rounded-md border border-slate-800 p-3 pr-11" key={item.id}>
-                  <DeleteProfileItemButton action={removeProfileItemFromForm} collection="education" id={item.id} label={`Delete ${item.school}`} />
+                <div className="rounded-md border border-slate-800 p-3" key={item.id}>
                   <p className="flex items-center gap-2 text-sm font-medium">
                     <GraduationCap className="h-4 w-4 text-cyan-300" aria-hidden="true" />
                     {item.school}
@@ -188,15 +187,14 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="group border-slate-800 bg-slate-950 text-white">
+            <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>
               <h2 className="text-base font-semibold">Projects</h2>
-              <SimpleProfileEditor action={addProfileProject} profile={profile} type="project" />
+              <SimpleProfileEditor action={addProfileProject} deleteAction={removeProfileItemFromForm} profile={profile} type="project" />
             </CardHeader>
             <CardContent className="space-y-3">
               {profile.projects.slice(0, 3).map((item) => (
-                <div className="group/item relative rounded-md border border-slate-800 p-3 pr-11" key={item.id}>
-                  <DeleteProfileItemButton action={removeProfileItemFromForm} collection="projects" id={item.id} label={`Delete ${item.name}`} />
+                <div className="rounded-md border border-slate-800 p-3" key={item.id}>
                   <p className="flex items-center gap-2 text-sm font-medium">
                     <LinkIcon className="h-4 w-4 text-cyan-300" aria-hidden="true" />
                     {item.name}
@@ -211,15 +209,14 @@ export default async function ProfilePage() {
           <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>
               <h2 className="text-base font-semibold">Skills Preview</h2>
-              <SkillsEditor action={updateProfileSkills} skills={profile.skills} />
+              <SkillsEditor action={updateProfileSkills} majorSkill={profile.majorSkill} skills={profile.skills} />
             </CardHeader>
             <CardContent>
               {profile.skills.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {profile.skills.slice(0, 12).map((skill) => (
-                    <span className="group/skill inline-flex items-center rounded-md border border-slate-800 px-2 py-1 text-xs text-slate-300" key={skill}>
+                    <span className="inline-flex items-center rounded-md border border-slate-800 px-2 py-1 text-xs text-slate-300" key={skill}>
                       {skill}
-                      <DeleteSkillButton action={updateProfileSkills} remainingSkills={profile.skills.filter((item) => item !== skill)} skill={skill} />
                     </span>
                   ))}
                 </div>

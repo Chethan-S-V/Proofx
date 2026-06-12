@@ -15,7 +15,7 @@ const homeNavigationItems = [
   {
     href: "/dashboard/repositories",
     icon: FolderGit2,
-    label: "Repositories",
+    label: "Codespace",
   },
   {
     href: "/dashboard/proofs",

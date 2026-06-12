@@ -32,7 +32,7 @@ export const navigationItems: NavigationItem[] = [
     description: "Foundation workspace overview",
   },
   {
-    title: "Repositories",
+    title: "Codespace",
     href: "/dashboard/repositories",
     icon: FolderGit2,
     description: "Proof source collections",

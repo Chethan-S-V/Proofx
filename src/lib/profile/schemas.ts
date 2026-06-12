@@ -90,6 +90,7 @@ export const profileMetadataSchema = z
     lastName: z.string().trim().optional().nullable(),
     linkedin: z.string().url().optional().nullable(),
     location: z.string().trim().optional().nullable(),
+    majorSkill: z.string().trim().optional().nullable(),
     openToWork: z.boolean().optional().default(false),
     phoneNumber: z.string().trim().optional().nullable(),
     phoneVisibility: z.enum(["public", "recruiters", "connections", "private"]).optional().default("private"),
@@ -140,16 +141,29 @@ export const updateProfileAboutSchema = z.object({
 });
 
 export const updateProfileSkillsSchema = z.object({
+  majorSkill: optionalText(80),
   skills: z
     .string()
-    .max(1200)
-    .transform((value) =>
-      value
+    .max(4000)
+    .transform((value) => {
+      const seenSkills = new Set<string>();
+
+      return value
         .split(",")
         .map((skill) => skill.trim())
         .filter(Boolean)
-        .slice(0, 40),
-    ),
+        .filter((skill) => {
+          const key = skill.toLowerCase();
+
+          if (seenSkills.has(key)) {
+            return false;
+          }
+
+          seenSkills.add(key);
+          return true;
+        })
+        .slice(0, 120);
+    }),
 });
 
 export const addExperienceSchema = profileExperienceSchema.omit({ id: true });

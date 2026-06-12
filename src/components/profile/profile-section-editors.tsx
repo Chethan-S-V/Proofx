@@ -11,22 +11,99 @@ const textareaClass =
   "min-h-28 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400";
 
 const skillSuggestions = [
-  "TypeScript",
-  "Next.js",
-  "React",
-  "Node.js",
-  "PostgreSQL",
-  "Drizzle ORM",
-  "Supabase",
-  "Tailwind CSS",
-  "Python",
-  "Java",
-  "Git",
-  "Docker",
+  "Accessibility",
+  "Agile",
+  "AI Engineering",
+  "Android",
+  "Angular",
+  "API Design",
   "AWS",
-  "UI Design",
-  "Machine Learning",
+  "Azure",
+  "Bash",
+  "C",
+  "C#",
+  "C++",
+  "CI/CD",
+  "Cloud Architecture",
+  "CSS",
+  "Cybersecurity",
   "Data Analysis",
+  "Data Engineering",
+  "Data Structures",
+  "DevOps",
+  "Docker",
+  "Drizzle ORM",
+  "Express.js",
+  "Figma",
+  "Firebase",
+  "Flutter",
+  "Frontend Architecture",
+  "Git",
+  "GitHub Actions",
+  "Go",
+  "Google Cloud",
+  "GraphQL",
+  "HTML",
+  "iOS",
+  "Java",
+  "JavaScript",
+  "Jest",
+  "Kubernetes",
+  "Laravel",
+  "Linux",
+  "Machine Learning",
+  "Microservices",
+  "MongoDB",
+  "MySQL",
+  "NestJS",
+  "Next.js",
+  "Node.js",
+  "PHP",
+  "Playwright",
+  "PostgreSQL",
+  "Prisma",
+  "Python",
+  "React",
+  "React Native",
+  "Redis",
+  "REST APIs",
+  "Ruby",
+  "Rust",
+  "Security Engineering",
+  "Software Architecture",
+  "Spring Boot",
+  "SQL",
+  "Supabase",
+  "Svelte",
+  "Swift",
+  "Tailwind CSS",
+  "Terraform",
+  "Testing",
+  "TypeScript",
+  "UI Design",
+  "UX Research",
+  "Vue.js",
+];
+
+const majorSkillOptions = [
+  "AI Engineer",
+  "Android Developer",
+  "Backend Developer",
+  "Cloud Engineer",
+  "Data Analyst",
+  "Data Engineer",
+  "DevOps Developer",
+  "Frontend Developer",
+  "Full Stack Developer",
+  "iOS Developer",
+  "Machine Learning Engineer",
+  "Mobile Developer",
+  "Product Designer",
+  "QA Engineer",
+  "Security Engineer",
+  "Software Developer",
+  "Software Engineer",
+  "UI/UX Designer",
 ];
 
 type ModalProps = {
@@ -106,13 +183,17 @@ export function AboutEditor({ about, action }: AboutEditorProps) {
 
 type SimpleProfileEditorProps = {
   action: (formData: FormData) => Promise<void>;
+  deleteAction: (formData: FormData) => Promise<void>;
   profile: DashboardProfile;
   type: "work" | "education" | "project";
 };
 
-export function SimpleProfileEditor({ action, profile, type }: SimpleProfileEditorProps) {
+export function SimpleProfileEditor({ action, deleteAction, profile, type }: SimpleProfileEditorProps) {
   const [open, setOpen] = useState(false);
-  const title = type === "work" ? "Add recent work" : type === "education" ? "Add education" : "Add project";
+  const title = type === "work" ? "Edit experience" : type === "education" ? "Edit education" : "Edit projects";
+  const addTitle = type === "work" ? "Add experience" : type === "education" ? "Add education" : "Add project";
+  const collection = type === "work" ? "experience" : type === "education" ? "education" : "projects";
+  const items = type === "work" ? profile.experience : type === "education" ? profile.education : profile.projects;
 
   async function handleAction(formData: FormData) {
     await action(formData);
@@ -124,6 +205,25 @@ export function SimpleProfileEditor({ action, profile, type }: SimpleProfileEdit
       <EditorButton label={title} onClick={() => setOpen(true)} />
       {open ? (
         <Modal onClose={() => setOpen(false)} title={title}>
+          {items.length > 0 ? (
+            <div className="mb-4 space-y-2">
+              {items.map((item) => {
+                const itemTitle = "title" in item ? item.title : "school" in item ? item.school : item.name;
+                const itemSubtitle = "company" in item ? item.company : "degree" in item ? item.degree : item.description;
+
+                return (
+                  <div className="flex items-center justify-between gap-3 rounded-md border border-slate-800 px-3 py-2" key={item.id}>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{itemTitle}</p>
+                      {itemSubtitle ? <p className="mt-1 truncate text-xs text-slate-500">{itemSubtitle}</p> : null}
+                    </div>
+                    <DeleteProfileItemButton action={deleteAction} collection={collection} id={item.id} label={`Delete ${itemTitle}`} mode="inline" />
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+          <h3 className="mb-3 text-sm font-semibold text-slate-300">{addTitle}</h3>
           {type === "work" ? (
             <form action={handleAction} className="grid gap-3 sm:grid-cols-2">
               <input className={inputClass} name="title" placeholder="Role title" required />
@@ -171,11 +271,12 @@ type DeleteProfileItemButtonProps = {
   collection: "education" | "experience" | "projects";
   id: string;
   label: string;
+  mode?: "absolute" | "inline";
 };
 
-export function DeleteProfileItemButton({ action, collection, id, label }: DeleteProfileItemButtonProps) {
+export function DeleteProfileItemButton({ action, collection, id, label, mode = "absolute" }: DeleteProfileItemButtonProps) {
   return (
-    <form action={action} className="absolute right-2 top-2 opacity-0 transition group-hover/item:opacity-100">
+    <form action={action} className={mode === "absolute" ? "absolute right-2 top-2 opacity-0 transition group-hover/item:opacity-100" : "shrink-0"}>
       <input name="collection" type="hidden" value={collection} />
       <input name="id" type="hidden" value={id} />
       <button
@@ -191,13 +292,14 @@ export function DeleteProfileItemButton({ action, collection, id, label }: Delet
 
 type DeleteSkillButtonProps = {
   action: (formData: FormData) => Promise<void>;
+  mode?: "hover" | "inline";
   remainingSkills: string[];
   skill: string;
 };
 
-export function DeleteSkillButton({ action, remainingSkills, skill }: DeleteSkillButtonProps) {
+export function DeleteSkillButton({ action, mode = "hover", remainingSkills, skill }: DeleteSkillButtonProps) {
   return (
-    <form action={action} className="ml-1 inline-flex opacity-0 transition group-hover/skill:opacity-100">
+    <form action={action} className={mode === "hover" ? "ml-1 inline-flex opacity-0 transition group-hover/skill:opacity-100" : "inline-flex"}>
       <input name="skills" type="hidden" value={remainingSkills.join(", ")} />
       <button
         aria-label={`Delete ${skill}`}
@@ -212,49 +314,124 @@ export function DeleteSkillButton({ action, remainingSkills, skill }: DeleteSkil
 
 type SkillsEditorProps = {
   action: (formData: FormData) => Promise<void>;
+  majorSkill: string | null;
   skills: string[];
 };
 
-export function SkillsEditor({ action, skills }: SkillsEditorProps) {
+export function SkillsEditor({ action, majorSkill, skills }: SkillsEditorProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(skills.join(", "));
+  const [majorValue, setMajorValue] = useState(majorSkill ?? "");
+  const [query, setQuery] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState(skills);
+  const trimmedQuery = query.trim();
+  const filteredSkills =
+    trimmedQuery.length > 0
+      ? skillSuggestions
+          .filter((skill) => skill.toLowerCase().includes(trimmedQuery.toLowerCase()))
+          .filter((skill) => !selectedSkills.some((selectedSkill) => selectedSkill.toLowerCase() === skill.toLowerCase()))
+          .slice(0, 8)
+      : [];
 
   async function handleAction(formData: FormData) {
     await action(formData);
     setOpen(false);
   }
 
-  function addSkill(skill: string) {
-    const currentSkills = value
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
+  function openEditor() {
+    setMajorValue(majorSkill ?? "");
+    setQuery("");
+    setSelectedSkills(skills);
+    setOpen(true);
+  }
 
-    if (currentSkills.some((item) => item.toLowerCase() === skill.toLowerCase())) {
+  function addSkill(skill: string) {
+    const nextSkill = skill.trim();
+
+    if (!nextSkill || selectedSkills.some((item) => item.toLowerCase() === nextSkill.toLowerCase())) {
       return;
     }
 
-    setValue([...currentSkills, skill].join(", "));
+    setSelectedSkills([...selectedSkills, nextSkill].sort((first, second) => first.localeCompare(second)));
+    setQuery("");
+  }
+
+  function removeSkill(skill: string) {
+    const nextSkills = selectedSkills.filter((item) => item !== skill);
+
+    setSelectedSkills(nextSkills);
+
+    if (majorValue === skill) {
+      setMajorValue("");
+    }
   }
 
   return (
     <>
-      <EditorButton label="Edit skills" onClick={() => setOpen(true)} />
+      <EditorButton label="Edit skills" onClick={openEditor} />
       {open ? (
         <Modal onClose={() => setOpen(false)} title="Edit skills">
           <form action={handleAction} className="space-y-4">
-            <input className={inputClass} name="skills" onChange={(event) => setValue(event.target.value)} placeholder="TypeScript, Next.js, PostgreSQL" value={value} />
-            <div className="flex flex-wrap gap-2">
-              {skillSuggestions.map((skill) => (
+            <input name="skills" type="hidden" value={selectedSkills.join(", ")} />
+            <label className="space-y-2">
+              <span className="text-xs font-medium uppercase tracking-[0.12em] text-slate-500">Major</span>
+              <select className={inputClass} name="majorSkill" onChange={(event) => setMajorValue(event.target.value)} value={majorValue}>
+                <option value="">Select major skill</option>
+                {majorSkillOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+                {selectedSkills
+                  .filter((skill) => !majorSkillOptions.some((option) => option.toLowerCase() === skill.toLowerCase()))
+                  .map((skill) => (
+                    <option key={skill} value={skill}>
+                      {skill}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            {selectedSkills.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {selectedSkills.map((skill) => (
+                  <span className="inline-flex items-center gap-1 rounded-md border border-slate-800 px-2 py-1 text-xs text-slate-300" key={skill}>
+                    {skill}
+                    <button
+                      aria-label={`Delete ${skill}`}
+                      className="inline-flex h-4 w-4 items-center justify-center rounded text-slate-500 transition hover:bg-red-500/10 hover:text-red-300"
+                      onClick={() => removeSkill(skill)}
+                      type="button"
+                    >
+                      <Trash2 className="h-3 w-3" aria-hidden="true" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            ) : null}
+            <div className="space-y-2">
+              <input className={inputClass} onChange={(event) => setQuery(event.target.value)} placeholder="Type a letter to search skills" value={query} />
+              {filteredSkills.length > 0 ? (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {filteredSkills.map((skill) => (
+                    <button
+                      className="rounded-md border border-slate-800 px-3 py-2 text-left text-xs text-slate-300 transition hover:border-cyan-400 hover:text-cyan-200"
+                      key={skill}
+                      onClick={() => addSkill(skill)}
+                      type="button"
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+              {trimmedQuery.length > 0 ? (
                 <button
-                  className="rounded-md border border-slate-800 px-2 py-1 text-xs text-slate-300 transition hover:border-cyan-400 hover:text-cyan-200"
-                  key={skill}
-                  onClick={() => addSkill(skill)}
+                  className="rounded-md border border-slate-800 px-3 py-2 text-xs text-slate-300 transition hover:border-cyan-400 hover:text-cyan-200"
+                  onClick={() => addSkill(trimmedQuery)}
                   type="button"
                 >
-                  {skill}
+                  Add {trimmedQuery}
                 </button>
-              ))}
+              ) : null}
             </div>
             <Button type="submit">Save skills</Button>
           </form>

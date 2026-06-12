@@ -4,6 +4,7 @@ import { db, usersTable } from "../../db";
 import { getServerUser, type AuthUser as User } from "../auth/service";
 import {
   accountSettingsSchema,
+  appearanceSettingsSchema,
   passwordSettingsSchema,
   preferenceSettingsSchema,
   settingsMetadataSchema,
@@ -11,15 +12,23 @@ import {
 
 export type DashboardSettings = {
   aiSuggestions: boolean;
+  autoSaveDrafts: boolean;
+  codeActivityTracking: boolean;
+  compactMode: boolean;
+  dataExportReady: boolean;
   email: string;
   emailNotifications: boolean;
-  firstName: string;
+  highContrast: boolean;
   language: string;
-  lastName: string;
+  loginAlerts: boolean;
   privateProfile: boolean;
   productUpdates: boolean;
+  proofReminders: boolean;
+  reduceMotion: boolean;
   recruiterVisible: boolean;
+  theme: string;
   timezone: string;
+  weeklyDigest: boolean;
 };
 
 function getText(value: FormDataEntryValue | null) {
@@ -45,15 +54,23 @@ export function getDashboardSettings(user: User): DashboardSettings {
 
   return {
     aiSuggestions: metadata.aiSuggestions,
+    autoSaveDrafts: metadata.autoSaveDrafts,
+    codeActivityTracking: metadata.codeActivityTracking,
+    compactMode: metadata.compactMode,
+    dataExportReady: metadata.dataExportReady,
     email: user.email ?? "",
     emailNotifications: metadata.emailNotifications,
-    firstName: typeof user.user_metadata?.firstName === "string" ? user.user_metadata.firstName : "",
+    highContrast: metadata.highContrast,
     language: metadata.language,
-    lastName: typeof user.user_metadata?.lastName === "string" ? user.user_metadata.lastName : "",
+    loginAlerts: metadata.loginAlerts,
     privateProfile: metadata.privateProfile,
     productUpdates: metadata.productUpdates,
+    proofReminders: metadata.proofReminders,
+    reduceMotion: metadata.reduceMotion,
     recruiterVisible: metadata.recruiterVisible,
+    theme: metadata.theme,
     timezone: metadata.timezone,
+    weeklyDigest: metadata.weeklyDigest,
   };
 }
 
@@ -62,9 +79,7 @@ export async function updateAccountSettings(formData: FormData) {
 
   const input = accountSettingsSchema.parse({
     email: getText(formData.get("email")),
-    firstName: getText(formData.get("firstName")),
     language: getText(formData.get("language")),
-    lastName: getText(formData.get("lastName")),
     timezone: getText(formData.get("timezone")),
   });
   const user = await getServerUser();
@@ -79,11 +94,9 @@ export async function updateAccountSettings(formData: FormData) {
       email: input.email === user.email ? user.email : input.email.toLowerCase(),
       metadata: {
         ...user.user_metadata,
-      firstName: input.firstName,
-      language: input.language,
-      lastName: input.lastName,
-      timezone: input.timezone,
-    },
+        language: input.language,
+        timezone: input.timezone,
+      },
       updatedAt: new Date(),
     })
     .where(eq(usersTable.id, user.id));
@@ -114,16 +127,35 @@ export async function updatePasswordSettings(formData: FormData) {
   revalidatePath("/dashboard/settings");
 }
 
+export async function updateAppearanceSettings(formData: FormData) {
+  "use server";
+
+  await updateMetadata(
+    appearanceSettingsSchema.parse({
+      compactMode: formData.get("compactMode") === "on",
+      highContrast: formData.get("highContrast") === "on",
+      reduceMotion: formData.get("reduceMotion") === "on",
+      theme: getText(formData.get("theme")),
+    }),
+  );
+}
+
 export async function updatePreferenceSettings(formData: FormData) {
   "use server";
 
   await updateMetadata(
     preferenceSettingsSchema.parse({
       aiSuggestions: formData.get("aiSuggestions") === "on",
+      autoSaveDrafts: formData.get("autoSaveDrafts") === "on",
+      codeActivityTracking: formData.get("codeActivityTracking") === "on",
+      dataExportReady: formData.get("dataExportReady") === "on",
       emailNotifications: formData.get("emailNotifications") === "on",
+      loginAlerts: formData.get("loginAlerts") === "on",
       privateProfile: formData.get("privateProfile") === "on",
       productUpdates: formData.get("productUpdates") === "on",
+      proofReminders: formData.get("proofReminders") === "on",
       recruiterVisible: formData.get("recruiterVisible") === "on",
+      weeklyDigest: formData.get("weeklyDigest") === "on",
     }),
   );
 }
