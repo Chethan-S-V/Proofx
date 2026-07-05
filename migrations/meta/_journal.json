@@ -1,0 +1,62 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1780462744054,
+      "tag": "20260603045904_pale_thor_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780470000000,
+      "tag": "20260603070000_create_user_streaks",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780475400000,
+      "tag": "20260603083000_create_repositories",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1780480800000,
+      "tag": "20260603100000_repository_platform_v1",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1780567200000,
+      "tag": "20260604120000_git_hosting_platform_v1",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1780569000000,
+      "tag": "20260604123000_repository_storage_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1780647000000,
+      "tag": "20260605110000_profile_media_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1780767000000,
+      "tag": "20260606173000_add_users_metadata",
+      "breakpoints": true
+    }
+  ]
+}

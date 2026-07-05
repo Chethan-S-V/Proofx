@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617;
+    --foreground: #f8fafc;
+    color-scheme: dark;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.prose-repository h1 {
+  color: rgb(240 246 252);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.prose-repository h2 {
+  border-bottom: 1px solid rgb(48 54 61);
+  color: rgb(240 246 252);
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.prose-repository h3 {
+  color: rgb(240 246 252);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.prose-repository p {
+  margin: 0.75rem 0;
+}
+
+.prose-repository a {
+  color: rgb(88 166 255);
+}
+
+.prose-repository code {
+  background: rgb(22 27 34);
+  border: 1px solid rgb(48 54 61);
+  border-radius: 0.375rem;
+  color: rgb(240 246 252);
+  padding: 0.125rem 0.375rem;
+}
+
+.prose-repository pre {
+  background: rgb(1 4 9);
+  border: 1px solid rgb(48 54 61);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.prose-repository pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.22);
+}
+
+.proofx-simple-loader {
+  animation: proofx-loader-spin 0.85s linear infinite;
+  border: 3px solid rgba(148, 163, 184, 0.28);
+  border-radius: 9999px;
+  border-top-color: #06b6d4;
+  display: block;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+@keyframes proofx-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proofx-simple-loader {
+    animation-duration: 1.8s;
+  }
+}
