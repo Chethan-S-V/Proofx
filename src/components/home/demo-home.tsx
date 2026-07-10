@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BriefcaseBusiness, ChevronRight, Filter, Radio, Sparkles, UsersRound } from "lucide-react";
+import { BriefcaseBusiness, ChevronRight, Filter, Sparkles, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { demoOrganizations, demoPosts, demoUsers } from "../../demo/home/data";
+import { demoPosts, demoUsers } from "../../demo/home/data";
 import { DemoPostCard } from "./demo-post-card";
 import { DemoLeftSidebar, DemoRightSidebar } from "./demo-sidebars";
+import { NetworkActionButton } from "./network-action-button";
 
 type FeedMode = "recent" | "trending" | "following";
 
@@ -22,6 +23,7 @@ function PostSkeleton() {
 
 export function DemoHome({ avatarUrl, displayName }: { avatarUrl: string | null; displayName: string }) {
   const [feedMode, setFeedMode] = useState<FeedMode>("recent");
+  const [networkPage, setNetworkPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loadingMore, setLoadingMore] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -56,19 +58,6 @@ export function DemoHome({ avatarUrl, displayName }: { avatarUrl: string | null;
 
   return (
     <div className="mx-auto max-w-[1600px]">
-      <section className="mb-5 overflow-hidden rounded-2xl border border-slate-800 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_32%),#020617] p-5 sm:p-7">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-cyan-300"><Radio className="h-3.5 w-3.5" /> ProofX demo network</div>
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Good to see you, {displayName.split(" ")[0]}.</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">Explore a fictional professional community where work is connected to evidence, contribution, and trusted review.</p>
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-center sm:gap-3">
-            {[['100', 'Demo professionals'], ['300', 'Active stories'], ['48.2k', 'Verified signals']].map(([value, label]) => <div className="rounded-xl border border-slate-800 bg-slate-950/80 px-3 py-3" key={label}><p className="text-lg font-semibold text-white">{value}</p><p className="text-[10px] text-slate-500">{label}</p></div>)}
-          </div>
-        </div>
-      </section>
-
       <div className="grid items-start gap-5 xl:grid-cols-[16rem_minmax(0,1fr)_19rem]">
         <div className="hidden xl:block"><div className="sticky top-20"><DemoLeftSidebar avatarUrl={avatarUrl} displayName={displayName} /></div></div>
 
@@ -88,9 +77,9 @@ export function DemoHome({ avatarUrl, displayName }: { avatarUrl: string | null;
           </section>
 
           <section className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-            <div className="flex items-center justify-between"><div><p className="text-xs font-medium text-cyan-300">Grow your network</p><h2 className="mt-1 text-sm font-semibold text-white">Professionals worth discovering</h2></div><ChevronRight className="h-4 w-4 text-slate-600" /></div>
+            <div className="flex items-center justify-between"><div><p className="text-xs font-medium text-cyan-300">Grow your network</p><h2 className="mt-1 text-sm font-semibold text-white">Professionals worth discovering</h2></div><button aria-label="Show other professionals" className="rounded-full p-2 text-slate-500 hover:bg-slate-900 hover:text-cyan-300" onClick={() => setNetworkPage((page) => (page + 1) % 4)} type="button"><ChevronRight className="h-4 w-4" /></button></div>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              {demoUsers.slice(8, 11).map((user) => <div className="rounded-lg border border-slate-800 bg-slate-900/45 p-3 text-center" key={user.id}><Image alt="" className="mx-auto h-12 w-12 rounded-full" height={48} src={user.avatarUrl} unoptimized width={48} /><p className="mt-2 truncate text-xs font-semibold text-white">{user.fullName}</p><p className="mt-1 truncate text-[11px] text-slate-500">{user.profession}</p><button className="mt-3 w-full rounded-md border border-cyan-400/30 py-1.5 text-xs font-semibold text-cyan-300 hover:bg-cyan-400/10" type="button">Connect</button></div>)}
+              {demoUsers.slice(8 + networkPage * 3, 11 + networkPage * 3).map((user) => <div className="rounded-lg border border-slate-800 bg-slate-900/45 p-3 text-center" key={user.id}><Link href={`/dashboard/profile/${user.id}`}><Image alt="" className="mx-auto h-12 w-12 rounded-full" height={48} src={user.avatarUrl} unoptimized width={48} /><p className="mt-2 truncate text-xs font-semibold text-white hover:text-cyan-300">{user.fullName}</p></Link><p className="mt-1 truncate text-[11px] text-slate-500">{user.profession}</p><NetworkActionButton className="mt-3 w-full rounded-md border border-cyan-400/30 py-1.5 text-xs font-semibold text-cyan-300 hover:bg-cyan-400/10" mode="connect" userId={user.id} userName={user.fullName} /></div>)}
             </div>
           </section>
 

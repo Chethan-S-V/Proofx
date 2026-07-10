@@ -2,6 +2,7 @@ import { BadgeCheck, Briefcase, GraduationCap, LinkIcon, MapPin, UserRound } fro
 import { redirect } from "next/navigation";
 import { ProfileContactInfo } from "../../../../src/components/profile/profile-contact-info";
 import { ProfileIntroEditor } from "../../../../src/components/profile/profile-intro-editor";
+import { ConnectionSummary, UserPublishedPosts } from "../../../../src/components/profile/connection-summary";
 import { ProfileMediaEditor } from "../../../../src/components/profile/profile-media-editor";
 import { AboutEditor, SimpleProfileEditor, SkillsEditor } from "../../../../src/components/profile/profile-section-editors";
 import { Card, CardContent, CardHeader } from "../../../../src/components/ui/card";
@@ -124,6 +125,7 @@ export default async function ProfilePage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="space-y-6">
+          <UserPublishedPosts />
           <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>
               <h2 className="text-base font-semibold">About</h2>
@@ -148,6 +150,8 @@ export default async function ProfilePage() {
               <p className="text-sm leading-6 text-slate-400">Personal profile for proof, work history, skills, and projects.</p>
             </CardContent>
           </Card>
+
+          <ConnectionSummary connections={profile.followers} editable follows={profile.following} />
 
           <Card className="group border-slate-800 bg-slate-950 text-white">
             <CardHeader>

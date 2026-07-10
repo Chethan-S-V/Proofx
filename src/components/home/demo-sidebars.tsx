@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Bookmark, CalendarDays, CheckCircle2, FolderGit2, Search, ShieldCheck, Sparkles, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { NetworkActionButton } from "./network-action-button";
 import {
   demoChallenges,
   demoEvents,
@@ -75,6 +76,7 @@ export function DemoLeftSidebar({ avatarUrl, displayName }: { avatarUrl: string 
 export function DemoRightSidebar() {
   const [query, setQuery] = useState("");
   const results = useMemo(() => searchDemoContent(query).slice(0, 6), [query]);
+  const leaders = demoUsers.filter((user) => /ceo|chief executive|founder|hr|manager|recruiter/i.test(user.profession)).slice(0, 4);
 
   return (
     <aside className="space-y-4">
@@ -92,11 +94,11 @@ export function DemoRightSidebar() {
 
       <Panel title="Trending professionals">
         <div className="space-y-4">
-          {demoUsers.slice(0, 4).map((user) => (
+          {leaders.map((user) => (
             <div className="flex items-center gap-3" key={user.id}>
-              <Image alt="" className="h-9 w-9 rounded-full" height={36} src={user.avatarUrl} unoptimized width={36} />
-              <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-white">{user.fullName}</p><p className="truncate text-[11px] text-slate-500">{user.profession}</p></div>
-              <button className="text-xs font-semibold text-cyan-300" type="button">Follow</button>
+              <Link href={`/dashboard/profile/${user.id}`}><Image alt="" className="h-9 w-9 rounded-full" height={36} src={user.avatarUrl} unoptimized width={36} /></Link>
+              <div className="min-w-0 flex-1"><Link className="block truncate text-xs font-semibold text-white hover:text-cyan-300" href={`/dashboard/profile/${user.id}`}>{user.fullName}</Link><p className="truncate text-[11px] text-slate-500">{user.profession}</p></div>
+              <NetworkActionButton className="text-xs font-semibold text-cyan-300" mode="follow" userId={user.id} userName={user.fullName} />
             </div>
           ))}
         </div>

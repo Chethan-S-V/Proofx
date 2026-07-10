@@ -1,6 +1,5 @@
-import { FeatureHub } from "../../../../src/components/dashboards/feature-hub";
-import { featureCatalog } from "../../../../src/lib/dashboard/feature-catalog";
+import { ProofsDashboard } from "../../../../src/components/proofs/proofs-dashboard";
 
 export default function ProofsPage() {
-  return <FeatureHub data={featureCatalog.proofs} />;
+  return <ProofsDashboard />;
 }

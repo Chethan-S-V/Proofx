@@ -1,6 +1,5 @@
-import { FeatureHub } from "../../../../src/components/dashboards/feature-hub";
-import { featureCatalog } from "../../../../src/lib/dashboard/feature-catalog";
+import { ChallengeExperience } from "../../../../src/components/challenges/challenge-detail-dialog";
 
 export default function ChallengesPage() {
-  return <FeatureHub data={featureCatalog.challenges} />;
+  return <ChallengeExperience />;
 }

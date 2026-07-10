@@ -3,6 +3,7 @@ import {
   Home,
   LucideIcon,
   MessageSquare,
+  Network,
   Plus,
   ShieldCheck,
   Trophy,
@@ -39,6 +40,12 @@ export const navigationItems: NavigationItem[] = [
     href: "/dashboard/post",
     icon: Plus,
     description: "Create a ProofX post",
+  },
+  {
+    title: "Organizations",
+    href: "/organizations",
+    icon: Network,
+    description: "Public organization discovery",
   },
   {
     title: "Challenges",

@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../../../../../src/components/ui/card";
 import { getServerUser } from "../../../../../src/lib/auth/service";
 import { getDashboardProfileByUserId } from "../../../../../src/lib/profile/service";
+import { DemoPublicProfile } from "../../../../../src/components/profile/demo-public-profile";
+import { demoUsers } from "../../../../../src/demo/home/data";
 
 type PublicProfilePageProps = {
   params: Promise<{
@@ -29,6 +31,12 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
 
   if (userId === currentUser.id) {
     redirect("/dashboard/profile");
+  }
+
+  const demoProfile = demoUsers.find((user) => user.id === userId);
+
+  if (demoProfile) {
+    return <DemoPublicProfile user={demoProfile} />;
   }
 
   const profile = await getDashboardProfileByUserId(userId);

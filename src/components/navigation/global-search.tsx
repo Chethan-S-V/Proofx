@@ -9,6 +9,7 @@ type SearchResult = {
   description: string;
   href: string;
   id: string;
+  imageUrl?: string | null;
   kind: "person" | "proof" | "organization" | "post" | "repository";
   title: string;
 };
@@ -42,7 +43,12 @@ function ResultSection({ emptyText, results, title }: { emptyText: string; resul
               key={`${result.kind}-${result.id}`}
             >
               <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-slate-900 text-cyan-300">
-                <UsersRound className="h-3.5 w-3.5" aria-hidden="true" />
+                {result.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img alt="" className="h-full w-full rounded-md object-cover" src={result.imageUrl} />
+                ) : (
+                  <UsersRound className="h-3.5 w-3.5" aria-hidden="true" />
+                )}
               </span>
               <span className="min-w-0">
                 <span className="block truncate text-sm font-medium text-white">{result.title}</span>
@@ -67,8 +73,6 @@ export function GlobalSearch() {
 
   useEffect(() => {
     if (query.trim().length < 2) {
-      setResults(emptyResults);
-      setLoading(false);
       return;
     }
 
@@ -97,7 +101,7 @@ export function GlobalSearch() {
           setResults({ ...responseResults, posts: [], repositories: [] });
           setOpen(true);
         }
-      } catch (error) {
+      } catch {
         if (!controller.signal.aborted) {
           setResults(emptyResults);
         }

@@ -1,6 +1,5 @@
-import { FeatureHub } from "../../../../src/components/dashboards/feature-hub";
-import { featureCatalog } from "../../../../src/lib/dashboard/feature-catalog";
+import { PostComposer } from "../../../../src/components/posts/post-composer";
 
 export default function PostPage() {
-  return <FeatureHub data={featureCatalog.post} />;
+  return <PostComposer />;
 }

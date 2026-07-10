@@ -5,6 +5,7 @@ import * as userSchema from "./schema/users";
 import * as profileSchema from "./schema/profiles";
 import * as streakSchema from "./schema/streaks";
 import * as repositorySchema from "./schema/repositories";
+import * as organizationSchema from "./schema/organizations";
 
 /**
  * Database connection configuration
@@ -36,6 +37,7 @@ export const db = drizzle(conn, {
     ...profileSchema,
     ...streakSchema,
     ...repositorySchema,
+    ...organizationSchema,
   },
 });
 
@@ -43,3 +45,4 @@ export * from "./schema/users";
 export * from "./schema/profiles";
 export * from "./schema/streaks";
 export * from "./schema/repositories";
+export * from "./schema/organizations";

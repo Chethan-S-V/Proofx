@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
@@ -63,6 +63,12 @@ export function AiAssistantButton() {
   const [request, setRequest] = useState("");
   const [plan, setPlan] = useState<readonly string[] | null>(null);
   const selectedTool = assistantTools.find((tool) => tool.id === selectedToolId) ?? assistantTools[0];
+
+  useEffect(() => {
+    function closeOnEscape(event: KeyboardEvent) { if (event.key === "Escape") setOpen(false); }
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, []);
 
   function selectTool(toolId: (typeof assistantTools)[number]["id"]) {
     setSelectedToolId(toolId);

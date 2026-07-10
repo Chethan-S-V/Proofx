@@ -22,6 +22,7 @@ import { redirect } from "next/navigation";
 import { Button } from "../../../../src/components/ui/button";
 import { Card } from "../../../../src/components/ui/card";
 import { getServerUser } from "../../../../src/lib/auth/service";
+import { SettingsCenter } from "../../../../src/components/settings/settings-center";
 import {
   getDashboardSettings,
   updateAppearanceSettings,
@@ -112,6 +113,9 @@ export default async function SettingsPage() {
   const settings = getDashboardSettings(user);
 
   return (
+    <>
+      <SettingsCenter email={settings.email} privateProfile={settings.privateProfile} recruiterVisible={settings.recruiterVisible} />
+      <div className="mt-8">
     <div className="mx-auto w-full max-w-6xl space-y-6">
       <div>
         <p className="text-sm font-medium text-cyan-300">Dashboard / Settings</p>
@@ -350,5 +354,7 @@ export default async function SettingsPage() {
         </aside>
       </div>
     </div>
+      </div>
+    </>
   );
 }

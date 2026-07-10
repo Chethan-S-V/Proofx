@@ -21,7 +21,7 @@ const professions = [
   "Chef", "Hotel Manager", "Chartered Accountant", "Lawyer", "Doctor", "Nurse", "Teacher", "Professor",
   "Scientist", "Startup Founder", "Entrepreneur", "Marketing Manager", "Sales Executive", "HR Manager",
   "Data Scientist", "DevOps Engineer", "Game Developer", "Fashion Designer", "Interior Designer",
-  "Music Producer", "Researcher", "Freelancer",
+  "Music Producer", "Researcher", "Freelancer", "Chief Executive Officer", "Technical Recruiter",
 ];
 const companies = ["Northstar Labs", "Lumen Harbor", "Cedar Works", "Orbit Foundry", "Blue Peak Studio", "Kindred Systems", "Atlas Grove", "Copper Cloud", "Juniper Collective", "Nova Loom", "Brightfield Health", "Mosaic Learning"];
 const locations = [
@@ -142,6 +142,7 @@ export const demoPosts = demoPostSchema.array().length(300).parse(
       tags: [...topic[2]],
       text: topic[1],
       type: topic[0],
+      viewCount: 940 + (index * 173) % 24000,
     };
   }),
 );
@@ -174,6 +175,7 @@ export const demoChallenges = demoChallengeSchema.array().parse(
     difficulty: (["Beginner", "Intermediate", "Advanced"] as const)[index % 3],
     id: `challenge-${index + 1}`,
     participants: 340 + index * 187,
+    prizeMoney: 15000 + (index % 6) * 10000,
     sponsor: demoOrganizations[index % demoOrganizations.length].name,
     title: ["Accessible City Services", "Responsible AI Review", "Sustainable Hospitality", "Open Health Visualization"][index % 4],
   })),
@@ -208,7 +210,7 @@ export function searchDemoContent(query: string): DemoSearchResult[] {
   const people = demoUsers
     .filter((user) => `${user.fullName} ${user.username} ${user.profession} ${user.skills.join(" ")}`.toLowerCase().includes(normalized))
     .slice(0, 4)
-    .map((user) => ({ description: `${user.profession} · ${user.company}`, href: "/home", id: user.id, kind: "person" as const, title: user.fullName }));
+    .map((user) => ({ description: `${user.profession} · ${user.company}`, href: `/dashboard/profile/${user.id}`, id: user.id, kind: "person" as const, title: user.fullName }));
   const posts = demoPosts
     .filter((post) => `${post.text} ${post.tags.join(" ")}`.toLowerCase().includes(normalized))
     .slice(0, 4)

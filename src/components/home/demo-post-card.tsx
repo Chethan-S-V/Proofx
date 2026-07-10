@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, CheckCircle2, Heart, MessageCircle, Repeat2, Send, ShieldCheck } from "lucide-react";
+import { Bookmark, CheckCircle2, Eye, Heart, MessageCircle, Repeat2, Send, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import type { DemoPost, DemoUser } from "../../demo/home/schemas";
 import { Badge } from "../ui/badge";
+import { SharePostDialog } from "./share-post-dialog";
 
 function compactNumber(value: number) {
   return Intl.NumberFormat("en", { compactDisplay: "short", notation: "compact" }).format(value);
@@ -21,6 +23,7 @@ export function DemoPostCard({ author, post }: { author: DemoUser; post: DemoPos
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [shared, setShared] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<string[]>([]);
@@ -40,7 +43,7 @@ export function DemoPostCard({ author, post }: { author: DemoUser; post: DemoPos
           <Image alt="" className="h-11 w-11 rounded-full border border-slate-700 object-cover" height={44} src={author.avatarUrl} unoptimized width={44} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-1.5">
-              <p className="truncate text-sm font-semibold text-white">{author.fullName}</p>
+              <Link className="truncate text-sm font-semibold text-white hover:text-cyan-300" href={`/dashboard/profile/${author.id}`}>{author.fullName}</Link>
               <CheckCircle2 className="h-3.5 w-3.5 text-cyan-300" aria-label="Demo verified profile" />
             </div>
             <p className="truncate text-xs text-slate-400">{author.headline}</p>
@@ -77,7 +80,7 @@ export function DemoPostCard({ author, post }: { author: DemoUser; post: DemoPos
       ) : null}
 
       <div className="px-4 pt-4 text-xs text-slate-500 sm:px-5">
-        {compactNumber(post.likeCount + (liked ? 1 : 0))} likes · {compactNumber(post.commentCount + comments.length)} comments · {compactNumber(post.shareCount + (shared ? 1 : 0))} shares
+        <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{compactNumber(post.viewCount)} views</span> · {compactNumber(post.likeCount + (liked ? 1 : 0))} likes · {compactNumber(post.commentCount + comments.length)} comments · {compactNumber(post.shareCount + (shared ? 1 : 0))} shares
       </div>
       <div className="mt-3 grid grid-cols-4 border-t border-slate-800 px-2 py-2">
         <button className={`flex items-center justify-center gap-2 rounded-md py-2 text-xs font-medium transition hover:bg-slate-900 ${liked ? "text-rose-300" : "text-slate-400"}`} onClick={() => setLiked((value) => !value)} type="button">
@@ -86,7 +89,7 @@ export function DemoPostCard({ author, post }: { author: DemoUser; post: DemoPos
         <button className="flex items-center justify-center gap-2 rounded-md py-2 text-xs font-medium text-slate-400 transition hover:bg-slate-900" onClick={() => setCommentOpen((value) => !value)} type="button">
           <MessageCircle className="h-4 w-4" aria-hidden="true" /> Comment
         </button>
-        <button className={`flex items-center justify-center gap-2 rounded-md py-2 text-xs font-medium transition hover:bg-slate-900 ${shared ? "text-cyan-300" : "text-slate-400"}`} onClick={() => setShared(true)} type="button">
+        <button className={`flex items-center justify-center gap-2 rounded-md py-2 text-xs font-medium transition hover:bg-slate-900 ${shared ? "text-cyan-300" : "text-slate-400"}`} onClick={() => setShareOpen(true)} type="button">
           <Repeat2 className="h-4 w-4" aria-hidden="true" /> Share
         </button>
         <button className={`flex items-center justify-center gap-2 rounded-md py-2 text-xs font-medium transition hover:bg-slate-900 ${bookmarked ? "text-amber-300" : "text-slate-400"}`} onClick={() => setBookmarked((value) => !value)} type="button">
@@ -109,6 +112,7 @@ export function DemoPostCard({ author, post }: { author: DemoUser; post: DemoPos
           </form>
         </div>
       ) : null}
+      {shareOpen ? <SharePostDialog onClose={() => setShareOpen(false)} onShared={() => { setShared(true); setShareOpen(false); }} postId={post.id} /> : null}
     </article>
   );
 }

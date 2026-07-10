@@ -43,6 +43,7 @@ export const demoPostSchema = z.object({
   tags: z.array(z.string()).min(1),
   text: z.string().min(1),
   type: z.string().min(1),
+  viewCount: z.number().int().nonnegative(),
 });
 
 export const demoOrganizationSchema = z.object({
@@ -77,6 +78,7 @@ export const demoChallengeSchema = z.object({
   difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
   id: z.string().min(1),
   participants: z.number().int().nonnegative(),
+  prizeMoney: z.number().int().nonnegative(),
   sponsor: z.string().min(1),
   title: z.string().min(1),
 });

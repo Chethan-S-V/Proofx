@@ -1,10 +1,12 @@
 import { sql } from "drizzle-orm";
-import { db, repositoriesTable, usersTable } from "../../db";
+import { db, organizationsTable, repositoriesTable, usersTable } from "../../db";
+import { getOrganizationTypeLabel } from "../../features/organizations/organization.constants";
 
 export type GlobalSearchResult = {
   description: string;
   href: string;
   id: string;
+  imageUrl?: string | null;
   kind: "person" | "proof" | "organization";
   title: string;
 };
@@ -36,7 +38,7 @@ export async function searchGlobal(query: string, currentUserId: string): Promis
   }
 
   const pattern = `%${normalizedQuery}%`;
-  const [peopleRows, proofRows] = await Promise.all([
+  const [peopleRows, proofRows, organizationRows] = await Promise.all([
     db
       .select({
         email: usersTable.email,
@@ -70,10 +72,60 @@ export async function searchGlobal(query: string, currentUserId: string): Promis
       .from(repositoriesTable)
       .where(sql`lower(${repositoriesTable.name} || ' ' || ${repositoriesTable.slug} || ' ' || coalesce(${repositoriesTable.description}, '')) like ${pattern}`)
       .limit(6),
+    db
+      .select({
+        city: organizationsTable.city,
+        country: organizationsTable.country,
+        followerCount: organizationsTable.followerCount,
+        id: organizationsTable.id,
+        industry: organizationsTable.industry,
+        logoUrl: organizationsTable.logoUrl,
+        name: organizationsTable.name,
+        slug: organizationsTable.slug,
+        specialties: organizationsTable.specialties,
+        tagline: organizationsTable.tagline,
+        type: organizationsTable.type,
+        verificationStatus: organizationsTable.verificationStatus,
+      })
+      .from(organizationsTable)
+      .where(sql`
+        lower(
+          ${organizationsTable.name}
+          || ' '
+          || ${organizationsTable.slug}
+          || ' '
+          || coalesce(${organizationsTable.industry}, '')
+          || ' '
+          || coalesce(${organizationsTable.tagline}, '')
+          || ' '
+          || ${organizationsTable.type}
+          || ' '
+          || coalesce(${organizationsTable.city}, '')
+          || ' '
+          || coalesce(${organizationsTable.country}, '')
+          || ' '
+          || coalesce(${organizationsTable.specialties}::text, '')
+        ) like ${pattern}
+      `)
+      .limit(6),
   ]);
 
   return {
-    organizations: [],
+    organizations: organizationRows.map((organization) => ({
+      description: [
+        organization.verificationStatus === "verified" ? "Verified" : "In review",
+        organization.industry ?? getOrganizationTypeLabel(organization.type),
+        [organization.city, organization.country].filter(Boolean).join(", "),
+        `${organization.followerCount} followers`,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      href: `/organizations/${organization.slug}`,
+      id: organization.id,
+      imageUrl: organization.logoUrl,
+      kind: "organization",
+      title: organization.name,
+    })),
     people: peopleRows.map((person) => ({
       description: person.email,
       href: `/dashboard/profile/${person.id}`,
