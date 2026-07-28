@@ -116,6 +116,11 @@ const postTopics = [
 
 const attachmentKinds = ["repository", "proof", "challenge", "organization"] as const;
 const attachmentTitles = ["Signal Kit", "Verified delivery record", "Responsible AI Sprint", "Northstar Labs update"];
+const demoVideoUrls = [
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+  "https://media.w3.org/2010/05/sintel/trailer.mp4",
+  "https://media.w3.org/2010/05/bunny/trailer.mp4",
+];
 const baseTime = Date.parse("2026-07-04T08:00:00.000Z");
 
 export const demoPosts = demoPostSchema.array().length(300).parse(
@@ -123,6 +128,7 @@ export const demoPosts = demoPostSchema.array().length(300).parse(
     const topic = postTopics[index % postTopics.length];
     const author = demoUsers[(index * 13) % demoUsers.length];
     const hasAttachment = index % 3 === 0;
+    const videoUrl = index % 7 === 0 ? demoVideoUrls[index % demoVideoUrls.length] : null;
     return {
       attachment: hasAttachment
         ? {
@@ -136,13 +142,15 @@ export const demoPosts = demoPostSchema.array().length(300).parse(
       commentCount: 5 + (index * 11) % 260,
       createdAt: new Date(baseTime - index * 37 * 60 * 1000).toISOString(),
       id: `demo-post-${index + 1}`,
-      imageUrl: index % 4 !== 1 ? svgDataUrl(topic[0], index + 11, 1200, 630) : null,
+      imageUrl: !videoUrl && index % 4 !== 1 ? svgDataUrl(topic[0], index + 11, 1200, 630) : null,
       likeCount: 72 + (index * 47) % 4200,
+      mediaAspect: (["landscape", "portrait", "square"] as const)[index % 3],
       shareCount: 3 + (index * 17) % 610,
       tags: [...topic[2]],
       text: topic[1],
       type: topic[0],
       viewCount: 940 + (index * 173) % 24000,
+      videoUrl,
     };
   }),
 );
@@ -169,15 +177,30 @@ export const demoProofs = demoProofSchema.array().parse(
   })),
 );
 
+const challengeTitles = [
+  "Accessible API Build",
+  "Mobile Design System",
+  "Responsible AI Evaluation",
+  "Open Source Performance Fix",
+  "48-hour Product Sprint",
+  "Portfolio Evidence Review",
+  "Frontend Hiring Exercise",
+  "Client Dashboard Delivery",
+  "Developer Internship Project",
+  "Cloud Fundamentals Certification",
+  "Secure Authentication Audit",
+  "Community Learning Toolkit",
+];
+
 export const demoChallenges = demoChallengeSchema.array().parse(
-  Array.from({ length: 12 }, (_, index) => ({
+  Array.from({ length: 36 }, (_, index) => ({
     deadline: `${5 + index} days`,
     difficulty: (["Beginner", "Intermediate", "Advanced"] as const)[index % 3],
     id: `challenge-${index + 1}`,
     participants: 340 + index * 187,
     prizeMoney: 15000 + (index % 6) * 10000,
     sponsor: demoOrganizations[index % demoOrganizations.length].name,
-    title: ["Accessible City Services", "Responsible AI Review", "Sustainable Hospitality", "Open Health Visualization"][index % 4],
+    title: `${challengeTitles[index % challengeTitles.length]} · Round ${Math.floor(index / challengeTitles.length) + 1}`,
   })),
 );
 
@@ -201,7 +224,7 @@ export const demoNotifications = demoNotificationSchema.array().parse([
 
 export const technologyTrends = ["TypeScript", "Responsible AI", "Rust", "Design Systems", "PostgreSQL", "Cybersecurity"];
 
-export type DemoSearchResult = { description: string; href: string; id: string; kind: "person" | "post" | "organization" | "repository"; title: string };
+export type DemoSearchResult = { description: string; href: string; id: string; kind: "person" | "challenge" | "organization" | "repository"; title: string };
 
 export function searchDemoContent(query: string): DemoSearchResult[] {
   const normalized = query.trim().toLowerCase();
@@ -211,10 +234,10 @@ export function searchDemoContent(query: string): DemoSearchResult[] {
     .filter((user) => `${user.fullName} ${user.username} ${user.profession} ${user.skills.join(" ")}`.toLowerCase().includes(normalized))
     .slice(0, 4)
     .map((user) => ({ description: `${user.profession} · ${user.company}`, href: `/dashboard/profile/${user.id}`, id: user.id, kind: "person" as const, title: user.fullName }));
-  const posts = demoPosts
-    .filter((post) => `${post.text} ${post.tags.join(" ")}`.toLowerCase().includes(normalized))
+  const challenges = demoChallenges
+    .filter((challenge) => `${challenge.title} ${challenge.sponsor} ${challenge.difficulty}`.toLowerCase().includes(normalized))
     .slice(0, 4)
-    .map((post) => ({ description: post.text, href: `/home#${post.id}`, id: post.id, kind: "post" as const, title: post.type }));
+    .map((challenge) => ({ description: `${challenge.difficulty} · ${challenge.sponsor}`, href: "/dashboard/challenges", id: challenge.id, kind: "challenge" as const, title: challenge.title }));
   const organizations = demoOrganizations
     .filter((organization) => `${organization.name} ${organization.category}`.toLowerCase().includes(normalized))
     .slice(0, 4)
@@ -224,5 +247,5 @@ export function searchDemoContent(query: string): DemoSearchResult[] {
     .slice(0, 4)
     .map((repository) => ({ description: `${repository.language} · ${repository.stars.toLocaleString()} stars`, href: "/dashboard/repositories", id: repository.id, kind: "repository" as const, title: repository.name }));
 
-  return [...people, ...posts, ...organizations, ...repositories];
+  return [...people, ...challenges, ...organizations, ...repositories];
 }

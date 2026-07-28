@@ -110,11 +110,6 @@ export function getProfessionalHomeData(user: User): HomeData {
         value: "0",
         helper: "No proof completions recorded yet.",
       },
-      {
-        label: "Organizations",
-        value: "0",
-        helper: "No organization memberships found.",
-      },
     ],
     feedSections: [
       {
@@ -134,12 +129,6 @@ export function getProfessionalHomeData(user: User): HomeData {
         title: "Challenge Activity",
         description: "Challenge attempts, completions, and verified skill demonstrations.",
         emptyState: "No challenge activity is available yet.",
-      },
-      {
-        anchorId: "organization-activity",
-        title: "Organization Activity",
-        description: "Team and organization events tied to your verified profile.",
-        emptyState: "No organization activity is available.",
       },
       {
         anchorId: "recruiter-activity",

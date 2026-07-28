@@ -1,5 +1,5 @@
 import { loginSchema } from "../../../src/lib/auth/schemas";
-import { loginWithEmail, signInWithOAuth } from "../../../src/lib/auth/service";
+import { loginWithEmail, requestPasswordReset, signInWithOAuth } from "../../../src/lib/auth/service";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -17,6 +17,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const emailError = params?.emailError;
   const passwordError = params?.passwordError;
   const authError = params?.authError ?? params?.oauthError;
+  const resetRequested = params?.authError === "reset-requested";
+
+  async function passwordResetAction(formData: FormData) {
+    "use server";
+    await requestPasswordReset(formData.get("email")?.toString() ?? "");
+    redirect("/login?authError=reset-requested");
+  }
 
   async function loginAction(formData: FormData) {
     "use server";
@@ -163,9 +170,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                   Continue managing your verified records and professional proof profile.
                 </p>
-                {authError ? (
+                {authError && !resetRequested ? (
                   <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{authError}</p>
                 ) : null}
+                {resetRequested ? <p className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">If an account matches that email, password recovery instructions will be sent when email delivery is configured.</p> : null}
               </div>
 
               <div className="grid grid-cols-3 gap-2">
@@ -263,6 +271,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                     className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-950 outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
                     placeholder="Your password"
                   />
+                  <Link className="mt-3 inline-flex text-xs font-semibold text-slate-700 hover:text-cyan-700" href="/forgot-password">Forgot password?</Link>
                 </label>
                 <button
                   type="submit"
@@ -287,18 +296,18 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 Proof workspace
               </p>
               <h2 className="text-4xl font-semibold leading-tight text-white sm:text-5xl">
-                Your verified record stays ready.
+                Turn real work into opportunity signals.
               </h2>
               <p className="mt-5 text-base leading-7 text-slate-300">
-                Return to reviewed proofs, identity signals, and the credentials you can share with confidence.
+                Return to focused updates, saved evidence, client conversations, and challenge progress in one calm workspace.
               </p>
             </div>
 
             <div className="mt-12 grid gap-3">
               <div className="animate-fade-in-up rounded-lg border border-white/10 bg-white/[0.04] p-4" style={{ animationDelay: "0.2s" }}>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm font-medium text-slate-300">Profile trust</span>
-                  <span className="text-sm font-semibold text-cyan-200">Active</span>
+                  <span className="text-sm font-medium text-slate-300">Work signal</span>
+                  <span className="text-sm font-semibold text-cyan-200">Live</span>
                 </div>
                 <div className="mt-4 h-2 rounded-full bg-white/10">
                   <div className="h-2 w-[86%] rounded-full bg-cyan-300" />
@@ -308,15 +317,15 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <div className="animate-fade-in-up grid gap-3 sm:grid-cols-3" style={{ animationDelay: "0.3s" }}>
                 <div className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3">
                   <p className="text-2xl font-semibold text-white">12</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Proofs</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Projects</p>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3">
                   <p className="text-2xl font-semibold text-white">4</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Reviews</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Signals</p>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3">
                   <p className="text-2xl font-semibold text-white">1</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Profile</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Rooms</p>
                 </div>
               </div>
             </div>

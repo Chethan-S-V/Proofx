@@ -1,0 +1,15 @@
+"use client";
+
+import { Bookmark, FolderGit2, Search, Trophy } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { demoPosts, demoRepositories } from "../../demo/home/data";
+import { useSocialStore } from "../../lib/social/store";
+
+export function SavedItemsCenter() {
+  const [query, setQuery] = useState("");
+  const savedPosts = useSocialStore((state) => state.savedPosts);
+  const savePost = useSocialStore((state) => state.savePost);
+  const posts = useMemo(() => savedPosts.map((saved) => demoPosts.find((post) => post.id === saved.id)).filter((post): post is (typeof demoPosts)[number] => Boolean(post)).filter((post) => `${post.type} ${post.text}`.toLowerCase().includes(query.toLowerCase())), [query, savedPosts]);
+  return <div className="mx-auto max-w-5xl space-y-7"><header><p className="text-sm font-medium text-cyan-300">Your library</p><h1 className="mt-2 text-3xl font-semibold text-white">Saved items</h1><div className="relative mt-5 max-w-xl"><Search className="absolute left-3 top-3 h-4 w-4 text-slate-500" /><input className="h-10 w-full rounded-md border border-slate-800 bg-slate-950 pl-9 pr-3 text-sm text-white" onChange={(event) => setQuery(event.target.value)} placeholder="Search saved items" value={query} /></div></header><section><h2 className="flex items-center gap-2 text-lg font-semibold text-white"><Bookmark className="h-5 w-5 text-cyan-300" />Saved posts</h2><div className="mt-4 space-y-3">{posts.length ? posts.map((post) => <article className="rounded-xl border border-slate-800 bg-slate-950 p-4" key={post.id}><p className="text-sm font-semibold text-white">{post.type}</p><p className="mt-2 text-sm leading-6 text-slate-300">{post.text}</p><div className="mt-4 flex gap-3"><Link className="text-xs font-semibold text-cyan-300" href={`/home#${post.id}`}>Open original post</Link><button className="text-xs font-semibold text-rose-300" onClick={() => savePost({ authorId: post.authorId, id: post.id })} type="button">Remove saved item</button></div></article>) : <p className="rounded-xl border border-dashed border-slate-800 p-6 text-sm text-slate-500">No saved posts match your search.</p>}</div></section><section className="grid gap-4 md:grid-cols-2"><div className="rounded-xl border border-slate-800 bg-slate-950 p-5"><h2 className="flex items-center gap-2 font-semibold text-white"><Trophy className="h-5 w-5 text-amber-300" />Saved challenges</h2><p className="mt-3 text-sm text-slate-500">Challenges you save will appear here.</p><Link className="mt-4 inline-block text-xs font-semibold text-cyan-300" href="/dashboard/challenges">Browse challenges</Link></div><div className="rounded-xl border border-slate-800 bg-slate-950 p-5"><h2 className="flex items-center gap-2 font-semibold text-white"><FolderGit2 className="h-5 w-5 text-violet-300" />Saved repositories</h2><p className="mt-3 text-sm text-slate-500">Repository saves will appear here.</p><Link className="mt-4 inline-block text-xs font-semibold text-cyan-300" href="/dashboard/repositories">Browse repositories</Link></div></section></div>;
+}

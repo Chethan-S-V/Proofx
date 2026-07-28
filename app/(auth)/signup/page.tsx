@@ -180,28 +180,28 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
 
             <div className="my-14 max-w-xl lg:my-0">
               <p className="mb-5 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
-                Verified professional identity
+                Proof-powered career launch
               </p>
               <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl">
-                Build a profile around proof, not promises.
+                Start with work that speaks before your resume does.
               </h1>
               <p className="mt-5 max-w-lg text-base leading-7 text-slate-300">
                 Create your ProofX account to collect verified achievements, share trusted credentials,
-                and keep your professional record ready for every opportunity.
+                and keep your strongest outcomes ready for every opportunity.
               </p>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 <div className="animate-fade-in-up rounded-lg border border-white/10 bg-white/4 px-4 py-3" style={{ animationDelay: "0.1s" }}>
                   <p className="text-2xl font-semibold text-white">92%</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Trust ready</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Launch ready</p>
                 </div>
                 <div className="animate-fade-in-up rounded-lg border border-white/10 bg-white/4 px-4 py-3" style={{ animationDelay: "0.2s" }}>
                   <p className="text-2xl font-semibold text-white">3</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Proof paths</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Work paths</p>
                 </div>
                 <div className="animate-fade-in-up rounded-lg border border-white/10 bg-white/4 px-4 py-3" style={{ animationDelay: "0.3s" }}>
                   <p className="text-2xl font-semibold text-white">24h</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Review pace</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Momentum</p>
                 </div>
               </div>
             </div>
@@ -279,7 +279,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               </div>
               <div className="animate-fade-in-up flex items-center gap-3 rounded-lg border border-white/10 bg-white/4 px-4 py-3" style={{ animationDelay: "0.3s" }}>
                 <div className="h-2 w-2 shrink-0 rounded-full bg-cyan-300"></div>
-                <p className="text-sm text-slate-300">Build your professional profile</p>
+                <p className="text-sm text-slate-300">Showcase work with context and outcomes</p>
               </div>
               <div className="animate-fade-in-up flex items-center gap-3 rounded-lg border border-white/10 bg-white/4 px-4 py-3" style={{ animationDelay: "0.4s" }}>
                 <div className="h-2 w-2 shrink-0 rounded-full bg-cyan-300"></div>

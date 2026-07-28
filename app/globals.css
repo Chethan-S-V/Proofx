@@ -85,6 +85,36 @@ body {
   background: rgba(34, 211, 238, 0.22);
 }
 
+.proofx-light .bg-slate-950 {
+  background-color: #ffffff;
+}
+
+.proofx-light .bg-slate-900,
+.proofx-light .bg-slate-900\/45,
+.proofx-light .bg-slate-900\/50,
+.proofx-light .bg-slate-900\/55,
+.proofx-light .bg-slate-900\/60 {
+  background-color: #f8fafc;
+}
+
+.proofx-light .border-slate-800,
+.proofx-light .border-slate-700,
+.proofx-light .border-slate-900 {
+  border-color: #e2e8f0;
+}
+
+.proofx-light .text-white,
+.proofx-light .text-slate-200,
+.proofx-light .text-slate-300 {
+  color: #0f172a;
+}
+
+.proofx-light .text-slate-400,
+.proofx-light .text-slate-500,
+.proofx-light .text-slate-600 {
+  color: #475569;
+}
+
 .proofx-simple-loader {
   animation: proofx-loader-spin 0.85s linear infinite;
   border: 3px solid rgba(148, 163, 184, 0.28);

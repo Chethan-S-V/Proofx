@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, Eye, FolderGit2, ShieldCheck, Trophy } from "lucide-react";
+import { Eye, FolderGit2, ShieldCheck, Trophy } from "lucide-react";
 import type { HomeFeedSection } from "../../lib/home/service";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader } from "../ui/card";
@@ -10,7 +10,7 @@ type ActivityFeedProps = {
   sections: HomeFeedSection[];
 };
 
-const feedIcons = [FolderGit2, ShieldCheck, Trophy, Building2, Eye];
+const feedIcons = [FolderGit2, ShieldCheck, Trophy, Eye];
 
 export function ActivityFeed({ sections }: ActivityFeedProps) {
   return (

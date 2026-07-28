@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { resolveMx } from "dns/promises";
 import bcrypt from "bcryptjs";
+import { Algorithm, hash as hashArgon2, verify as verifyArgon2 } from "@node-rs/argon2";
 import { db, usersTable, type User } from "../../db";
 import { env } from "../env";
 import { clearSessionCookie, getSessionUserId, setSessionCookie } from "./session";
@@ -33,6 +34,15 @@ function authError(message: string) {
   return { error: new Error(message), data: { session: null, user: null } };
 }
 
+async function hashPassword(password: string) {
+  return hashArgon2(password, { algorithm: Algorithm.Argon2id, memoryCost: 19456, timeCost: 2, parallelism: 1 });
+}
+
+async function verifyPassword(hash: string, password: string) {
+  if (hash.startsWith("$argon2")) return verifyArgon2(hash, password);
+  return bcrypt.compare(password, hash);
+}
+
 async function canReceiveEmail(email: string) {
   const domain = email.split("@").at(1);
 
@@ -57,7 +67,7 @@ export async function loginWithEmail(input: LoginInput) {
     return authError("Invalid email.");
   }
 
-  if (!(await bcrypt.compare(input.password, user.passwordHash))) {
+  if (!(await verifyPassword(user.passwordHash, input.password))) {
     return authError("Invalid password.");
   }
 
@@ -81,7 +91,7 @@ export async function signupWithEmail(input: SignupInput) {
     return authError("An account with this email already exists.");
   }
 
-  const passwordHash = await bcrypt.hash(input.password, 12);
+  const passwordHash = await hashPassword(input.password);
   const metadata = {
     role: Role.USER,
     firstName: input.firstName ?? null,
@@ -106,6 +116,14 @@ export async function signupWithEmail(input: SignupInput) {
 export async function logoutCurrentUser() {
   await clearSessionCookie();
   return { error: null };
+}
+
+export async function requestPasswordReset(emailInput: string) {
+  const email = emailInput.trim().toLowerCase();
+  const [user] = await db.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.email, email)).limit(1);
+
+  // Keep this response neutral so an email address cannot be used to enumerate accounts.
+  return { error: null, requested: Boolean(user) };
 }
 
 export async function getServerSession() {
@@ -337,7 +355,7 @@ export async function completeOAuthSignIn(provider: OAuthProvider, code: string)
   }
 
   const userId = crypto.randomUUID();
-  const passwordHash = await bcrypt.hash(crypto.randomUUID(), 12);
+  const passwordHash = await hashPassword(crypto.randomUUID());
 
   await db.insert(usersTable).values({
     email: oauthProfile.email,

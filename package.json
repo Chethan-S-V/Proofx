@@ -8,11 +8,13 @@
     "db:migrate": "dotenv -e .env.local -- node migrate.mjs",
     "locations:import": "node scripts/import-geonames-postal-locations.mjs",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@monaco-editor/react": "^4.7.0",
+    "@node-rs/argon2": "^2.0.2",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.2",
     "framer-motion": "^12.40.0",

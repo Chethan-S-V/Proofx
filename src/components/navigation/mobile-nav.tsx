@@ -8,10 +8,13 @@ import { Menu, X } from "lucide-react";
 import { navigationItems } from "../../constants/navigation";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
+import { useSocialStore } from "../../lib/social/store";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const codebaseEnabled = useSocialStore((state) => state.codebaseEnabled);
+  const visibleItems = navigationItems.filter((item) => item.title !== "Codebase" || codebaseEnabled).filter((item) => item.title !== "Network" || !codebaseEnabled);
 
   return (
     <>
@@ -40,7 +43,7 @@ export function MobileNav() {
               </div>
 
               <nav className="mt-8 space-y-1">
-                {navigationItems.map((item) => {
+                {visibleItems.map((item) => {
                   const isActive = pathname === item.href;
 
                   return (

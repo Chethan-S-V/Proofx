@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, UsersRound } from "lucide-react";
+import { Building2, FolderGit2, Search, Trophy, UsersRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DEMO_MODE_ENABLED, searchDemoContent } from "../../demo/home/data";
 
@@ -10,27 +10,27 @@ type SearchResult = {
   href: string;
   id: string;
   imageUrl?: string | null;
-  kind: "person" | "proof" | "organization" | "post" | "repository";
+  kind: "person" | "organization" | "repository" | "challenge";
   title: string;
 };
 
 type SearchResponse = {
   organizations: SearchResult[];
   people: SearchResult[];
-  posts: SearchResult[];
-  proofs: SearchResult[];
   repositories: SearchResult[];
+  challenges: SearchResult[];
 };
 
 const emptyResults: SearchResponse = {
   organizations: [],
   people: [],
-  posts: [],
-  proofs: [],
   repositories: [],
+  challenges: [],
 };
 
-function ResultSection({ emptyText, results, title }: { emptyText: string; results: SearchResult[]; title: string }) {
+const sectionIcons = { Challenges: Trophy, Organizations: Building2, Professionals: UsersRound, Repositories: FolderGit2 };
+function ResultSection({ emptyText, results, title }: { emptyText: string; results: SearchResult[]; title: keyof typeof sectionIcons }) {
+  const Icon = sectionIcons[title];
   return (
     <div className="border-t border-slate-800 py-2 first:border-t-0">
       <p className="px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">{title}</p>
@@ -47,7 +47,7 @@ function ResultSection({ emptyText, results, title }: { emptyText: string; resul
                   // eslint-disable-next-line @next/next/no-img-element
                   <img alt="" className="h-full w-full rounded-md object-cover" src={result.imageUrl} />
                 ) : (
-                  <UsersRound className="h-3.5 w-3.5" aria-hidden="true" />
+                  <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                 )}
               </span>
               <span className="min-w-0">
@@ -69,6 +69,7 @@ export function GlobalSearch() {
   const [results, setResults] = useState<SearchResponse>(emptyResults);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeKind, setActiveKind] = useState<"all" | "people" | "repositories" | "organizations" | "challenges">("all");
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,9 +87,8 @@ export function GlobalSearch() {
           setResults({
             organizations: matches.filter((result) => result.kind === "organization"),
             people: matches.filter((result) => result.kind === "person"),
-            posts: matches.filter((result) => result.kind === "post"),
-            proofs: [],
             repositories: matches.filter((result) => result.kind === "repository"),
+            challenges: matches.filter((result) => result.kind === "challenge"),
           });
           setOpen(true);
           return;
@@ -97,8 +97,8 @@ export function GlobalSearch() {
         const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal });
 
         if (response.ok) {
-          const responseResults = (await response.json()) as Omit<SearchResponse, "posts" | "repositories">;
-          setResults({ ...responseResults, posts: [], repositories: [] });
+          const responseResults = (await response.json()) as Omit<SearchResponse, "challenges">;
+          setResults({ ...responseResults, challenges: [] });
           setOpen(true);
         }
       } catch {
@@ -140,18 +140,20 @@ export function GlobalSearch() {
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
-        placeholder="Search people, posts, organizations, repositories..."
+        placeholder="Search people, repositories, organizations, challenges..."
         type="search"
         value={query}
       />
       {open && query.trim().length >= 2 ? (
         <div className="absolute left-0 right-0 top-12 z-50 max-h-[28rem] overflow-auto rounded-md border border-slate-800 bg-slate-950 p-2 shadow-2xl">
           {loading ? <p className="px-3 py-3 text-sm text-slate-500">Searching...</p> : null}
-          <ResultSection emptyText="No matching people found." results={results.people} title="People" />
-          {DEMO_MODE_ENABLED ? <ResultSection emptyText="No matching posts found." results={results.posts} title="Posts" /> : null}
-          <ResultSection emptyText="No matching proof sources found." results={results.proofs} title="Proofs" />
-          {DEMO_MODE_ENABLED ? <ResultSection emptyText="No matching repositories found." results={results.repositories} title="Repositories" /> : null}
-          <ResultSection emptyText="Organization search will appear when organization records exist." results={results.organizations} title="Organizations" />
+          <div className="flex gap-1 overflow-x-auto px-1 pb-2">
+            {[["all", "All"], ["people", "People"], ["repositories", "Repositories"], ["organizations", "Organizations"], ["challenges", "Challenges"]].map(([value, label]) => <button className={`whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${activeKind === value ? "bg-cyan-300 text-slate-950" : "bg-slate-900 text-slate-300"}`} key={value} onClick={() => setActiveKind(value as typeof activeKind)} type="button">{label}</button>)}
+          </div>
+          {(activeKind === "all" || activeKind === "people") ? <ResultSection emptyText="No matching professionals found." results={results.people} title="Professionals" /> : null}
+          {(activeKind === "all" || activeKind === "repositories") ? <ResultSection emptyText="No matching repositories found." results={results.repositories} title="Repositories" /> : null}
+          {(activeKind === "all" || activeKind === "organizations") ? <ResultSection emptyText="No matching organizations found." results={results.organizations} title="Organizations" /> : null}
+          {(activeKind === "all" || activeKind === "challenges") ? <ResultSection emptyText="No matching challenges found." results={results.challenges} title="Challenges" /> : null}
         </div>
       ) : null}
     </div>

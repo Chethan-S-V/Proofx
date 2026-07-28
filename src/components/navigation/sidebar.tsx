@@ -6,9 +6,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navigationItems } from "../../constants/navigation";
 import { cn } from "../../lib/utils";
+import { useSocialStore } from "../../lib/social/store";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const codebaseEnabled = useSocialStore((state) => state.codebaseEnabled);
+  const visibleItems = navigationItems.filter((item) => item.title !== "Codebase" || codebaseEnabled).filter((item) => item.title !== "Network" || !codebaseEnabled);
 
   return (
     <aside className="sticky top-0 hidden h-screen w-72 flex-none border-r border-slate-200 bg-white/90 px-4 py-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90 lg:block">
@@ -24,7 +27,7 @@ export function Sidebar() {
         </Link>
 
         <nav className="mt-8 space-y-1">
-          {navigationItems.map((item) => {
+          {visibleItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link

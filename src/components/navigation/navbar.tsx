@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { Network } from "lucide-react";
 import type { StreakSummary } from "../../lib/streaks/service";
 import { StreakDisplay } from "../streaks/streak-display";
-import { AiAssistantButton } from "./ai-assistant-button";
 import { GlobalSearch } from "./global-search";
 import { MobileNav } from "./mobile-nav";
 import { NotificationDropdown } from "./notification-dropdown";
@@ -29,7 +29,9 @@ export function Navbar({ avatarUrl, logoutAction, streak, userName }: NavbarProp
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           <StreakDisplay streak={streak} />
           <GlobalSearch />
-          <AiAssistantButton />
+          <Link aria-label="Open network" className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700 text-slate-200 transition hover:border-cyan-400/50 hover:text-cyan-200" href="/dashboard/network">
+            <Network className="h-4 w-4" aria-hidden="true" />
+          </Link>
           <NotificationDropdown />
           <UserMenu avatarUrl={avatarUrl} logoutAction={logoutAction} userName={userName} />
         </div>

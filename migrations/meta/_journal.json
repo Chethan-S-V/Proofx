@@ -57,6 +57,34 @@
       "when": 1780767000000,
       "tag": "20260606173000_add_users_metadata",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783674000000,
+      "tag": "20260710090000_organization_operating_system",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1783679400000,
+      "tag": "20260710103000_organization_part1_public_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1784106000000,
+      "tag": "20260715090000_user_blocks",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1784109600000,
+      "tag": "20260715100000_production_auth",
+      "breakpoints": true
     }
   ]
 }

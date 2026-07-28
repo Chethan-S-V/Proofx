@@ -39,11 +39,13 @@ export const demoPostSchema = z.object({
   id: z.string().min(1),
   imageUrl: z.string().min(1).nullable(),
   likeCount: z.number().int().nonnegative(),
+  mediaAspect: z.enum(["landscape", "portrait", "square"]),
   shareCount: z.number().int().nonnegative(),
   tags: z.array(z.string()).min(1),
   text: z.string().min(1),
   type: z.string().min(1),
   viewCount: z.number().int().nonnegative(),
+  videoUrl: z.string().url().nullable(),
 });
 
 export const demoOrganizationSchema = z.object({

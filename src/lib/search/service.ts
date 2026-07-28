@@ -7,14 +7,14 @@ export type GlobalSearchResult = {
   href: string;
   id: string;
   imageUrl?: string | null;
-  kind: "person" | "proof" | "organization";
+  kind: "person" | "organization" | "repository";
   title: string;
 };
 
 export type GlobalSearchResponse = {
   organizations: GlobalSearchResult[];
   people: GlobalSearchResult[];
-  proofs: GlobalSearchResult[];
+  repositories: GlobalSearchResult[];
 };
 
 function getMetadataText(value: unknown) {
@@ -34,7 +34,7 @@ export async function searchGlobal(query: string, currentUserId: string): Promis
   const normalizedQuery = query.trim().toLowerCase();
 
   if (normalizedQuery.length < 2) {
-    return { organizations: [], people: [], proofs: [] };
+    return { organizations: [], people: [], repositories: [] };
   }
 
   const pattern = `%${normalizedQuery}%`;
@@ -47,8 +47,6 @@ export async function searchGlobal(query: string, currentUserId: string): Promis
       })
       .from(usersTable)
       .where(sql`
-        ${usersTable.id} <> ${currentUserId}
-        and
         lower(
           ${usersTable.email}
           || ' '
@@ -133,11 +131,11 @@ export async function searchGlobal(query: string, currentUserId: string): Promis
       kind: "person",
       title: getDisplayName(person.metadata, person.email),
     })),
-    proofs: proofRows.map((proof) => ({
-      description: proof.description ?? "Repository proof source",
+    repositories: proofRows.map((proof) => ({
+      description: proof.description ?? "Repository",
       href: "/dashboard/repositories",
       id: proof.id,
-      kind: "proof",
+      kind: "repository",
       title: proof.name,
     })),
   };

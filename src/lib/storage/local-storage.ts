@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "fs/promises";
 import path from "path";
 
-const UPLOAD_ROOT = path.join(/*turbopackIgnore: true*/ process.cwd(), "public", "uploads");
+const UPLOAD_ROOT = path.resolve("public", "uploads");
 
 function safePath(storagePath: string) {
   const normalized = storagePath.replace(/\\/g, "/").split("/").filter(Boolean).join("/");

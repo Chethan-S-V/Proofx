@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, FolderGit2, ShieldCheck } from "lucide-react";
+import { FolderGit2, ShieldCheck } from "lucide-react";
 import type { HomeMetric, HomeProfileSummary } from "../../lib/home/service";
 import { Badge } from "../ui/badge";
 import { Card } from "../ui/card";
@@ -11,7 +11,7 @@ type ProfileCardProps = {
   quickStats: HomeMetric[];
 };
 
-const statIcons = [FolderGit2, ShieldCheck, Building2];
+const statIcons = [FolderGit2, ShieldCheck];
 
 export function ProfileCard({ profile, quickStats }: ProfileCardProps) {
   return (

@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { demoUsers } from "../../demo/home/data";
 import { sharePostSchema } from "../../lib/social/schemas";
 
-export function SharePostDialog({ onClose, onShared, postId }: { onClose: () => void; onShared: () => void; postId: string }) {
+export function SharePostDialog({ onClose, onShared, postId }: { onClose: () => void; onShared: (recipientIds: string[]) => void; postId: string }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [error, setError] = useState("");
@@ -26,7 +26,7 @@ export function SharePostDialog({ onClose, onShared, postId }: { onClose: () => 
       setError(parsed.error.issues[0]?.message ?? "Choose a recipient.");
       return;
     }
-    onShared();
+    onShared(parsed.data.recipientIds);
   }
 
   return (

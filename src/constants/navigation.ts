@@ -5,7 +5,6 @@ import {
   MessageSquare,
   Network,
   Plus,
-  ShieldCheck,
   Trophy,
 } from "lucide-react";
 
@@ -24,28 +23,22 @@ export const navigationItems: NavigationItem[] = [
     description: "Professional activity and proof overview",
   },
   {
-    title: "Codespace",
-    href: "/dashboard/repositories",
-    icon: FolderGit2,
-    description: "Proof source collections",
+    title: "Network",
+    href: "/dashboard/network",
+    icon: Network,
+    description: "Connect with people and follow professional organizations",
   },
   {
-    title: "Proofs",
-    href: "/dashboard/proofs",
-    icon: ShieldCheck,
-    description: "Verified proof records",
+    title: "Codebase",
+    href: "/dashboard/repositories",
+    icon: FolderGit2,
+    description: "Your repository workspace",
   },
   {
     title: "Post",
     href: "/dashboard/post",
     icon: Plus,
     description: "Create a ProofX post",
-  },
-  {
-    title: "Organizations",
-    href: "/organizations",
-    icon: Network,
-    description: "Public organization discovery",
   },
   {
     title: "Challenges",
